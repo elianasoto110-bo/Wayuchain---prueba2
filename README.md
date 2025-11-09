@@ -87,6 +87,13 @@
             border: 3px solid var(--color-wayu-light);
             box-shadow: 0 0 0 3px var(--color-wayu-medium);
         }
+        
+        /* Estilo para el botón de Logout */
+        #logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
     </style>
     <!-- Firebase SDKs -->
     <script type="module">
@@ -130,20 +137,20 @@
         }
     </script>
 </head>
-<body class="bg-wayu-light min-h-screen flex flex-col items-center p-4 sm:p-8">
+<body class="bg-wayu-light min-h-screen flex flex-col items-center p-4 sm:p-8 relative">
 
-    <!-- Contenedor Principal Centrado -->
-    <div class="w-full max-w-4xl mx-auto">
+    <!-- Vista de Login y Selección de Rol (Inicial) -->
+    <div id="login-view" class="w-full max-w-md mx-auto">
         
-        <!-- Pantalla de Bienvenida/Login (Card Principal) -->
-        <div id="app-card" class="bg-white p-6 sm:p-10 rounded-xl shadow-2xl border-4 border-wayu-dark text-center">
+        <!-- Card Principal de Login -->
+        <div class="bg-white p-6 sm:p-10 rounded-xl shadow-2xl border-4 border-wayu-dark text-center">
             
             <!-- Logo -->
             <div class="logo-bulb">
                 <div class="logo-bulb-map"></div>
                 <div class="logo-bulb-filament">
                     <!-- Icono de bombilla (usando SVG de Lucide) -->
-                    <svg class="w-20 h-20 text-yellow-500 transform -rotate-12" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .9-1.8 1.8-2.3a4 4 0 0 0-.5-6c-.4-.5-1-.9-1.5-1.4.1-.1.1-.2.2-.3 1.2-1.2 2.7-2 4-2.7.2-.1.4-.2.5-.3.4-.2.8-.4 1.2-.6.7-.4 1.4-.7 2-1-.3 0-.6 0-.9-.1C18.6 1.4 17 1 15.5 1 12.8 1 10 2.2 8.4 4.3 8 4.7 7.7 5 7.4 5.3 7 5.7 6.6 6 6.3 6.3 6 6.6 5.6 7 5.3 7.3c-.5.4-.9.9-1.3 1.4-.1.1-.2.2-.3.3-1.4 1.6-2.2 3.5-2.2 5.5 0 2 .8 3.9 2.2 5.5 1.6 1.4 3.5 2.2 5.5 2.2 2 0 3.9-.8 5.5-2.2.4-.4.8-.8 1.2-1.2-.1-.1-.1-.2-.2-.3-.5-.4-1.2-.8-1.9-1.2-1.5-.8-3.3-1.2-5.2-1.2z" stroke="#6e4a2c" fill="#facc15"/><path d="M12 21a2 2 0 0 1-2-2v-3h4v3a2 2 0 0 1-2 2z" fill="#6e4a2c" stroke="#6e4a2c"/></svg>
+                    <svg class="w-20 h-20 text-yellow-500 transform -rotate-12" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .9-1.8 1.8-2.3a4 4 0 0 0-.5-6c-.4-.5-1-.9-1.5-1.4.1-.1.1-.2.2-.3 1.2-1.2 2.7-2 4-2.7.2-.1.4-.2.5-.3.4-.2.8-.4 1.2-.6.7-.4 1.4-.7 2-1-.3 0-.6 0-.9-.1C18.6 1.4 17 1 15.5 1 12.8 1 10 2.2 8.4 4.3 8 4.7 7.7 5 7.4 5.3 7 5.7 6.6 6 6.3 6.3 6 6.6 5.6 7 5.3 7.3c-.5.4-.9.9-1.3 1.4-.1-.1-.2-.2-.3-.3-1.4 1.6-2.2 3.5-2.2 5.5 0 2 .8 3.9 2.2 5.5 1.6 1.4 3.5 2.2 5.5 2.2 2 0 3.9-.8 5.5-2.2.4-.4.8-.8 1.2-1.2-.1-.1-.1-.2-.2-.3-.5-.4-1.2-.8-1.9-1.2-1.5-.8-3.3-1.2-5.2-1.2z" stroke="#6e4a2c" fill="#facc15"/><path d="M12 21a2 2 0 0 1-2-2v-3h4v3a2 2 0 0 1-2 2z" fill="#6e4a2c" stroke="#6e4a2c"/></svg>
                 </div>
             </div>
 
@@ -178,7 +185,6 @@
                     <div class="relative max-w-xs mx-auto">
                         <select id="role-selector" class="block appearance-none w-full bg-wayu-light border-2 border-wayu-dark text-wayu-dark py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-wayu-medium cursor-pointer transition duration-300">
                             <option value="none" disabled selected>Elige un rol...</option>
-                            <!-- ROLES ACTUALIZADOS según la solicitud anterior -->
                             <option value="financiador">Financiador (Dona los fondos)</option>
                             <option value="ejecutor">Organización Ejecutora</option>
                             <option value="tecnicos">Técnicos</option>
@@ -191,98 +197,136 @@
                     </div>
                 </div>
 
-                <!-- Botón de Entrada (Línea 195) -->
+                <!-- Botón de Entrada -->
                 <button id="enter-simulation-btn"
                     class="bg-wayu-medium hover:bg-wayu-dark text-white font-extrabold py-4 px-12 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed text-xl uppercase tracking-wider">
                     Entrar a la Simulación
                 </button>
                 <p id="role-message" class="text-sm text-red-500 mt-3 hidden">Por favor, selecciona un rol antes de entrar.</p>
             </div>
+        </div>
+    </div>
+
+    <!-- Panel de Control (Dashboard) - Inicialmente oculto -->
+    <div id="dashboard-view" class="w-full max-w-6xl mx-auto hidden">
         
-            <!-- Sección de Trazabilidad (incluida dentro del app-card) -->
-            <div id="trazability-section" class="mt-12 p-6 sm:p-10 bg-white rounded-xl shadow-2xl border-4 border-wayu-medium max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-wayu-dark mb-6 text-center">
-                    Registro de Trazabilidad en Blockchain
-                </h2>
+        <!-- Encabezado del Dashboard -->
+        <header class="bg-wayu-dark text-white p-4 sm:p-6 rounded-t-xl flex justify-between items-center shadow-xl">
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-wider">
+                <span id="dashboard-role-title">DASHBOARD</span>
+            </h2>
+            <div class="flex items-center space-x-4">
+                <span id="dashboard-user-id" class="text-sm font-light italic">Usuario: [Nombre]</span>
+                <button id="logout-btn" onclick="handleLogout()"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105">
+                    Salir
+                </button>
+            </div>
+        </header>
 
-                <div class="timeline-container max-w-2xl mx-auto">
-                    
-                    <!-- Paso 1: Fondos Recibidos (Bloque Inicial) -->
-                    <div class="timeline-step">
-                        <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 1: Recepción de Fondos</h3>
-                        <p class="text-sm text-gray-600 mb-2">Wayuchain - Transacción Inicial</p>
-                        <div class="bg-wayu-light p-3 rounded-lg shadow-inner border border-wayu-medium">
-                            <p class="font-mono text-gray-800">
-                                **Origen:** Gobierno / Fondos Privados
-                            </p>
-                            <p class="font-mono text-gray-800">
-                                **Monto Total Recibido:** <span class="text-green-600 font-bold">$1.000.000.oo USD</span>
-                            </p>
+        <!-- Contenedor de Métricas (Simulación) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 bg-white shadow-inner">
+            <!-- Tarjeta 1: Fondos Totales -->
+            <div class="p-4 bg-wayu-light rounded-lg border-2 border-wayu-medium shadow-md">
+                <p class="text-sm font-semibold text-gray-600">Fondos Totales (USD)</p>
+                <p class="text-3xl font-extrabold text-wayu-dark mt-1">$1,000,000.oo</p>
+            </div>
+            <!-- Tarjeta 2: Gasto Verificado -->
+            <div class="p-4 bg-green-100 rounded-lg border-2 border-wayu-accent shadow-md">
+                <p class="text-sm font-semibold text-green-700">Gasto Verificado (Bloques 3, 4)</p>
+                <p class="text-3xl font-extrabold text-green-600 mt-1">$68,800.oo</p>
+            </div>
+            <!-- Tarjeta 3: Saldo Disponible -->
+            <div class="p-4 bg-blue-100 rounded-lg border-2 border-blue-400 shadow-md">
+                <p class="text-sm font-semibold text-blue-700">Saldo Disponible</p>
+                <p class="text-3xl font-extrabold text-blue-600 mt-1">$931,200.oo</p>
+            </div>
+        </div>
+
+        <!-- Sección de Trazabilidad (incluida en el dashboard) -->
+        <div id="trazability-section" class="p-6 sm:p-10 bg-white rounded-b-xl shadow-2xl border-4 border-wayu-medium border-t-0">
+            <h2 class="text-3xl font-bold text-wayu-dark mb-6 text-center border-b pb-4">
+                Registro Detallado de Transacciones (Blockchain)
+            </h2>
+
+            <div class="timeline-container max-w-2xl mx-auto">
+                
+                <!-- Paso 1: Fondos Recibidos (Bloque Inicial) -->
+                <div class="timeline-step">
+                    <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 1: Recepción de Fondos</h3>
+                    <p class="text-sm text-gray-600 mb-2">Wayuchain - Transacción Inicial</p>
+                    <div class="bg-wayu-light p-3 rounded-lg shadow-inner border border-wayu-medium">
+                        <p class="font-mono text-gray-800">
+                            **Origen:** Financiador (Gobierno / Fondos Privados)
+                        </p>
+                        <p class="font-mono text-gray-800">
+                            **Monto Total Recibido:** <span class="text-green-600 font-bold">$1.000.000.oo USD</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Asignación a Ejecutores -->
+                <div class="timeline-step">
+                    <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 2: Asignación a Ejecutores</h3>
+                    <p class="text-sm text-gray-600 mb-2">Entidades Ejecutoras reciben presupuesto inicial</p>
+                    <div class="bg-wayu-light p-3 rounded-lg shadow-inner border border-wayu-medium grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-mono text-gray-800 font-bold">Asignación Wayuchain</p>
+                            <p class="font-mono text-gray-800">$500.000.oo USD</p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-gray-800 font-bold">Asignación Entidad Ejecutora</p>
+                            <p class="font-mono text-gray-800">$500.000.oo USD</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Paso 2: Asignación a Ejecutores -->
-                    <div class="timeline-step">
-                        <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 2: Asignación a Ejecutores</h3>
-                        <p class="text-sm text-gray-600 mb-2">Ejecutores reciben presupuesto inicial</p>
-                        <div class="bg-wayu-light p-3 rounded-lg shadow-inner border border-wayu-medium grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <p class="font-mono text-gray-800 font-bold">Asignación Wayuchain</p>
-                                <p class="font-mono text-gray-800">$500.000.oo USD</p>
-                            </div>
-                            <div>
-                                <p class="font-mono text-gray-800 font-bold">Asignación Entidad Ejecutora</p>
-                                <p class="font-mono text-gray-800">$500.000.oo USD</p>
-                            </div>
-                        </div>
+                <!-- Paso 3: Gasto del Ejecutor 1 -->
+                <div class="timeline-step">
+                    <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 3: Gasto - Ejecutor 1</h3>
+                    <p class="text-sm text-gray-600 mb-2">Compra de Paneles Solares e Instalación</p>
+                    <div class="bg-gray-100 p-3 rounded-lg shadow-inner border border-wayu-medium">
+                        <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
+                            <li>Compra 10 páneles solares: $37.500.00 USD</li>
+                            <li>Transporte páneles: $3.300.00 USD</li>
+                            <li>Mano de obra 5 técnicos: $4.500.00 USD</li>
+                            <li class="font-bold">Total Gastado: $45.300.00 USD</li>
+                        </ul>
                     </div>
+                </div>
+                
+                <!-- Paso 4: Gasto del Ejecutor 2 -->
+                <div class="timeline-step">
+                    <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 4: Gasto - Ejecutor 2</h3>
+                    <p class="text-sm text-gray-600 mb-2">Compra de Contadores</p>
+                    <div class="bg-gray-100 p-3 rounded-lg shadow-inner border border-wayu-medium">
+                        <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
+                            <li>Compra 10 contadores para cada panel solar: $23.500.00 USD</li>
+                            <li class="font-bold">Total Gastado: $23.500.00 USD</li>
+                        </ul>
+                    </div>
+                </div>
 
-                    <!-- Paso 3: Gasto del Ejecutor 1 -->
-                    <div class="timeline-step">
-                        <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 3: Gasto - Ejecutor 1</h3>
-                        <p class="text-sm text-gray-600 mb-2">Compra de Paneles Solares e Instalación</p>
-                        <div class="bg-gray-100 p-3 rounded-lg shadow-inner border border-wayu-medium">
-                            <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
-                                <li>Compra 10 páneles solares: $37.500.00 USD</li>
-                                <li>Transporte páneles: $3.300.00 USD</li>
-                                <li>Mano de obra 5 técnicos: $4.500.00 USD</li>
-                                <li class="font-bold">Total Gastado: $45.300.00 USD</li>
-                            </ul>
-                        </div>
+                <!-- Paso 5: Validación y Aprobación (Bloque de Confirmación) -->
+                <div class="timeline-step">
+                    <h3 class="text-xl font-bold text-wayu-accent mb-1">Bloque 5: Validación y Pago OK</h3>
+                    <p class="text-sm text-wayu-dark mb-2 font-semibold">Validadores y Técnicos Confirman Ejecución</p>
+                    <div class="bg-green-100 p-4 rounded-lg shadow border-2 border-wayu-accent">
+                        <p class="text-green-800 text-sm italic">
+                            Validadores (Comunidad Wayu) + Técnicos han realizado la auditoría de estos procesos y han dado su **OK** para realizar los pagos directamente a los proveedores. <span class="font-bold">Transparencia y ejecución verificada.</span>
+                        </p>
                     </div>
-                    
-                    <!-- Paso 4: Gasto del Ejecutor 2 -->
-                    <div class="timeline-step">
-                        <h3 class="text-xl font-bold text-wayu-dark mb-1">Bloque 4: Gasto - Ejecutor 2</h3>
-                        <p class="text-sm text-gray-600 mb-2">Compra de Contadores</p>
-                        <div class="bg-gray-100 p-3 rounded-lg shadow-inner border border-wayu-medium">
-                            <ul class="list-disc list-inside text-sm text-gray-800 space-y-1">
-                                <li>Compra 10 contadores para cada panel solar: $23.500.00 USD</li>
-                                <li class="font-bold">Total Gastado: $23.500.00 USD</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Paso 5: Validación y Aprobación (Bloque de Confirmación) -->
-                    <div class="timeline-step">
-                        <h3 class="text-xl font-bold text-wayu-accent mb-1">Bloque 5: Validación y Pago OK</h3>
-                        <p class="text-sm text-wayu-dark mb-2 font-semibold">Validadores y Técnicos Confirman Ejecución</p>
-                        <div class="bg-green-100 p-4 rounded-lg shadow border-2 border-wayu-accent">
-                            <p class="text-green-800 text-sm italic">
-                                Validadores (Comunidad Wayu) + Técnicos han realizado la auditoría de estos procesos y han dado su **OK** para realizar los pagos directamente a los proveedores. <span class="font-bold">Transparencia y ejecución verificada.</span>
-                            </p>
-                        </div>
-                    </div>
-
                 </div>
 
             </div>
+
         </div>
     </div>
 
     <script>
         // Simulación de sesión de usuario
         let currentUserName = null;
+        let currentRoleText = null;
 
         // Función de reemplazo de alert (modal)
         function alert(message) {
@@ -331,16 +375,47 @@
 
         function handleEnterSimulation() {
             const roleSelector = document.getElementById('role-selector');
+            const loginView = document.getElementById('login-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            
             const selectedRole = roleSelector.value;
             const selectedRoleText = roleSelector.options[roleSelector.selectedIndex].text;
             
             if (selectedRole !== 'none') {
-                console.log(`Entrando a la simulación con el usuario: ${currentUserName} y el rol: ${selectedRole}`);
-                // [RESTAURADO] Volver a mostrar una alerta en lugar de cambiar de pantalla
-                alert(`¡Simulación iniciada! Usuario: ${currentUserName}. Rol: ${selectedRoleText}.`);
+                currentRoleText = selectedRoleText;
+
+                // [MODIFICACIÓN] Ocultar la vista de login y mostrar el Dashboard
+                loginView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                
+                // Actualizar los datos del Dashboard
+                document.getElementById('dashboard-role-title').textContent = `${currentRoleText.toUpperCase()} DASHBOARD`;
+                document.getElementById('dashboard-user-id').textContent = `Usuario: ${currentUserName}`;
+
+                // Scroll to top for a clean view transition
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
             } else {
                 alert('Por favor, selecciona un rol antes de entrar.');
             }
+        }
+        
+        function handleLogout() {
+            const loginView = document.getElementById('login-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            
+            // Ocultar el Dashboard y mostrar la vista de Login
+            dashboardView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+
+            // Resetear la interfaz de login
+            document.getElementById('username-input').value = '';
+            document.getElementById('login-container').classList.remove('hidden');
+            document.getElementById('role-selection-container').classList.add('hidden');
+            document.getElementById('role-selector').value = 'none';
+            document.getElementById('subtitle').textContent = 'Energía que Ilumina Confianza';
+            
+            alert('Has cerrado sesión correctamente.');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
