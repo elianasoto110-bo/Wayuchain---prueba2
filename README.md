@@ -185,7 +185,7 @@
             <div class="flex items-center space-x-4">
                 <span id="dashboard-user-id" class="text-sm font-light italic">Usuario: [Nombre]</span>
                 <button id="logout-btn" onclick="handleLogout()"
-                    class="bg-wayu-accent hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105 shadow-md">
+                    class="bg-wayu-accent hover:bg-red-700 text-black font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105 shadow-md">
                     Salir
                 </button>
             </div>
