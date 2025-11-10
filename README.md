@@ -178,7 +178,7 @@
     <div id="dashboard-view" class="w-full max-w-6xl mx-auto hidden mt-6">
         
         <!-- Encabezado del Dashboard -->
-        <header class="bg-wayu-dark text-white p-4 sm:p-6 rounded-t-xl flex flex-col sm:flex-row justify-between items-center shadow-xl">
+        <header class="bg-wayu-dark text-black p-4 sm:p-6 rounded-t-xl flex flex-col sm:flex-row justify-between items-center shadow-xl">
             <h2 class="text-2xl sm:text-3xl font-bold tracking-wider mb-2 sm:mb-0">
                 <span id="dashboard-role-title">DASHBOARD</span>
             </h2>
